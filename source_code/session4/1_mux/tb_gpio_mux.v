@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 // tb_peri_mux_io.v
-module gpio_mux_tb;
+module tb_gpio_mux;
 
     reg [1:0] sel;
     reg tx0;
