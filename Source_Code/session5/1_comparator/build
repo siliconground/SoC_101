@@ -1,0 +1,3 @@
+xvlog ./*.v
+xelab tb_comparator -debug wave -s tb_comparator
+xsim tb_comparator -gui -wdb simulate_xsim_tb_comparator.wdb

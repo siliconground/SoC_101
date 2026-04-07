@@ -1,0 +1,3 @@
+xvlog ./*.v
+xelab tb_multiplexed_bus_driver -debug wave -s tb_multiplexed_bus_driver
+xsim tb_multiplexed_bus_driver -gui -wdb simulate_xsim_tb_multiplexed_bus_driver.wdb
