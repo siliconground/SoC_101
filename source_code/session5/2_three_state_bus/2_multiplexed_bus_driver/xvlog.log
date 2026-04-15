@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/tutor/SoC_101/source_code/session5/2_three_state_bus/2_multiplexed_bud_driver/multiplexed_bus_driver.v" into library work
+INFO: [VRFC 10-311] analyzing module multiplexed_bus_driver
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/tutor/SoC_101/source_code/session5/2_three_state_bus/2_multiplexed_bud_driver/tb_multiplxed_bus_driver.v" into library work
+INFO: [VRFC 10-311] analyzing module tb_multiplexed_bus_driver
