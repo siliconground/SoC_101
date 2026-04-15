@@ -1,1 +1,0 @@
-"tb_bidirectional_bus_driver" -debug "wave" -s "tb_bidirectional_bus_driver" 
