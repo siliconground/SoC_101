@@ -1,1 +1,0 @@
-"tb_data_bus_driver" -debug "wave" -s "tb_data_bus_driver" 

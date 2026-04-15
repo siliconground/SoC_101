@@ -1,4 +1,0 @@
-set_param project.enableReportConfiguration 0
-load_feature core
-current_fileset
-xsim {tb_multiplexed_bus_driver} -wdb {sim.wdb} -autoloadwcfg
