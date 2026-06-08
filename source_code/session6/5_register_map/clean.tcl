@@ -1,1 +1,1 @@
-rm -rf *xe* *xs* *.wdb* *trace* *xv* *we* .Xil vivado*
+rm -rf *xe* *xs* *.wdb* *trace* *xv* *we* .Xil vivado*
