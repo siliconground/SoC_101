@@ -4,7 +4,10 @@
 module tb_comparator();
 
   // 입력 및 출력 신호 정의
+  // stimulus: reg(active)
   reg [3:0] a, b;
+
+  // monitor: wire(passive)
   wire greater, equal, less;
 
   // 테스트할 comparator 인스턴스 생성
@@ -18,6 +21,7 @@ module tb_comparator();
 
   // 테스트 시나리오
   initial begin
+    // system task
     $monitor("%0t\t %b\t %b\t %b\t %b\t %b", $time, a, b, greater, equal, less);
 
     // 테스트 케이스
