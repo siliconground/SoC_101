@@ -9,8 +9,9 @@ module d_latch (
 
 input clk;
 input d;
-output reg q;
+output q;
 
+reg q;
 always @(*) begin
     if( clk ) q <= d;
 end
