@@ -1,30 +1,40 @@
 `timescale 1ns / 1ps
-//tb_bcdtoseg.v
+//tb_i_bcdtoseg.v
 module tb_bcd_to_7seg;
 
-reg [3:0] bcd;           // 테스트용 BCD 입력
-wire [6:0] seg;          // 출력 (7-세그먼트 제어 신호)
+// stimulus signal
+reg     [3:0] i_bcd   ;           
+// monitor signal
+wire    [6:0] o_seg     ;          
 
-// DUT(Design Under Test) 인스턴스 생성
+// DUT instantiation
 bcd_to_7seg uut (
-    .bcd(bcd),
-    .seg(seg)
+    .i_bcd(i_bcd),
+    .o_seg(o_seg)
 );
 
+// Dumpfile gen
 initial begin
-    $monitor("Time=%0t | BCD Input=%b | Seven Segment Output=%b", $time, bcd, seg);
+    $dumpfile("./bcd_to_7seg.vcd"   );
+    $dumpvars(0, tb_bcd_to_7seg     );
+end
 
-    // 테스트 케이스들
-    bcd = 4'b0000; #10; // 입력: 0 -> 출력: a~g = "1111110"
-    bcd = 4'b0001; #10; // 입력: 1 -> 출력: a~g = "0110000"
-    bcd = 4'b0010; #10; // 입력: 2 -> 출력: a~g = "1101101"
-    bcd = 4'b0011; #10; // 입력: 3 -> 출력: a~g = "1111001"
-    bcd = 4'b0100; #10; // 입력: 4 -> 출력: a~g = "0110011"
-    bcd = 4'b0101; #10; // 입력: 5 -> 출력: a~g = "1011011"
-    bcd = 4'b0110; #10; // 입력: 6 -> 출력: a~g = "1011111"
-    bcd = 4'b0111; #10; // 입력: 7 -> 출력: a~g = "1110000"
-    bcd = 4'b1000; #10; // 입력: 8 -> 출력: a~g = "1111111"
-    bcd = 4'b1001; #10; // 입력: 9 -> 출력: a~g = "1111011"
+// apply stimulus
+initial begin
+    // monitoring
+    $monitor("Time=%0t | i_bcd Input=%b | Seven Segment Output=%b", $time, i_bcd, o_seg);
+
+    // apply stimulus
+    i_bcd = 4'b0000; #10; 
+    i_bcd = 4'b0001; #10; 
+    i_bcd = 4'b0010; #10; 
+    i_bcd = 4'b0011; #10; 
+    i_bcd = 4'b0100; #10; 
+    i_bcd = 4'b0101; #10; 
+    i_bcd = 4'b0110; #10; 
+    i_bcd = 4'b0111; #10; 
+    i_bcd = 4'b1000; #10; 
+    i_bcd = 4'b1001; #10; 
 
     $finish;
 end

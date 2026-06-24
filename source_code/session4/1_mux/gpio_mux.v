@@ -1,22 +1,34 @@
 `timescale 1ns / 1ps
-//peri_mux_io.v
-module gpio_mux (
-    input wire [1:0] sel,       // 2비트 선택 신호
-    input wire tx0,             // UART0 Tx 신호
-    input wire rx0,             // UART0 Rx 신호
-    input wire pwm1,            // PWM 신호
-    input wire other_signal,    // 기타 주변 장치 신호
-    output reg gpio_pin         // GPIO 핀 출력
-);
 
-    always @(*) begin
-        case (sel)
-            2'b00: gpio_pin = tx0;          // UART0 Tx 선택
-            2'b01: gpio_pin = rx0;          // UART0 Rx 선택
-            2'b10: gpio_pin = pwm1;         // PWM 신호 선택
-            2'b11: gpio_pin = other_signal; // 기타 신호 선택
-            default: gpio_pin = 1'bz;       // 기본값: High-Z 상태
-        endcase
-    end
+module gpio_mux (
+    // port list
+    i_sel               ,
+    i_tx0               , 
+    i_rx0               , 
+    i_pwm1              ,
+    i_other_signal      ,
+    o_gpio_pin 
+
+    
+);
+// port declaration
+input [1:0] i_sel                 ;      
+input       i_tx0                 ;             
+input       i_rx0                 ;             
+input       i_pwm1                ;            
+input       i_other_signal        ;    
+output      o_gpio_pin            ;         
+
+// modeling
+reg o_gpio_pin; // type override
+always @(*) begin
+    case (i_sel) // binary coded selction signal
+        2'b00   : o_gpio_pin = i_tx0           ;          
+        2'b01   : o_gpio_pin = i_rx0           ;          
+        2'b10   : o_gpio_pin = i_pwm1          ;         
+        2'b11   : o_gpio_pin = i_other_signal  ; 
+        default : o_gpio_pin = 1'bz            ;       
+    endcase
+end
 
 endmodule

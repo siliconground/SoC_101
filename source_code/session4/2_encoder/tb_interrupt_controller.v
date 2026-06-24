@@ -1,44 +1,53 @@
 `timescale 1ns / 1ps
-//tb_int_cntl.v
+
 module tb_interrupt_controller;
 
-    // 테스트 벤치에서 사용할 신호 선언
-    reg [7:0] Int;          // 8개의 인터럽트 입력
-    reg IntAck;             // CPU로부터의 인터럽트 승인 신호
-    wire [2:0] IntID;       // 활성화된 인터럽트의 인덱스 출력
-    wire IntReq;            // 유효한 인터럽트 요청 신호
+// stimulus signal
+reg [7:0]   i_int       ;          
+reg         i_int_ack   ;        
 
-    // DUT (Device Under Test) 인스턴스화
-    interrupt_controller uut (
-        .Int(Int),
-        .IntAck(IntAck),
-        .IntID(IntID),
-        .IntReq(IntReq)
-    );
+// monitor signal
+wire [2:0]  o_int_id    ;       
+wire        o_int_req   ;            
 
-    // 테스트 시뮬레이션
-    initial begin
-        // 모니터링: 시뮬레이션 결과를 출력
-        $monitor("Time=%0t | Int=%b | IntAck=%b | IntID=%b | IntReq=%b", 
-                    $time, Int, IntAck, IntID, IntReq);
+// DUT instantiation
+interrupt_controller uut (
+    .i_int      (i_int      )           ,
+    .i_int_ack  (i_int_ack  )           ,
+    .o_int_id   (o_int_id   )           ,
+    .o_int_req  (o_int_req  )
+);
 
-        // 초기화
-        Int = 8'b0000_0000; // 모든 인터럽트 비활성화
-        IntAck = 1'b0;      // 승인 신호 비활성화
+// dumpfile gen
+initial begin
+    $dumpfile("./interrupt_controller.vcd") ;
+    $dumpvars(0, tb_interrupt_controller)   ;
+end
+
+// apply stimulus
+initial begin
+    // monitoring
+    $monitor("Time=%0t | i_int=%b | i_int_ack=%b | o_int_id=%b | o_int_req=%b", 
+            $time, i_int, i_int_ack, o_int_id, o_int_req);
+
+    // init
+    i_int           = 8'b0000_0000  ; 
+    i_int_ack       = 1'b0          ;      
+    
+    // apply stimulus
+    #10 i_int       = 8'b0000_0001  ;  
+    #10 i_int       = 8'b0010_0000  ;  
+    #10 i_int       = 8'b1000_0000  ;  
+    #10 i_int_ack   = 1'b1          ;       
+    #10 i_int_ack   = 1'b0          ;       
         
-        #10 Int = 8'b0000_0001;  // Int0 활성화 (우선순위 최하위)
-        #10 Int = 8'b0010_0000;  // Int5 활성화 (우선순위 중간)
-        #10 Int = 8'b1000_0000;  // Int7 활성화 (우선순위 최고)
-        #10 IntAck = 1'b1;       // CPU가 인터럽트를 수락 (모든 요청 초기화)
-        #10 IntAck = 1'b0;       // 승인 신호 비활성화 후 다음 요청 대기
+    #10 i_int       = 8'b0100_0010  ;  
+    #10 i_int_ack   = 1'b1          ;       
+    #10 i_int_ack   = 1'b0          ;
         
-        #10 Int = 8'b0100_0010;  // 여러 입력 활성화 (Int6 선택)
-        #10 IntAck = 1'b1;       // CPU가 인터럽트를 수락
-        #10 IntAck = 1'b0;
+    #10 i_int       = 8'b0000_0000  ;  
         
-        #10 Int = 8'b0000_0000;  // 모든 입력 비활성화
-        
-        #20 $finish;             // 시뮬레이션 종료
-    end
+    #20 $finish;             
+end
 
 endmodule
