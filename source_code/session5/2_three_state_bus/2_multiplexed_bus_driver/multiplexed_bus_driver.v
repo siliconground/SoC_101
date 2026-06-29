@@ -27,6 +27,6 @@ assign o_mux_out =  (i_en_a) ? i_data_a :
                     8'bz                            ; 
 
     
-assign i_bus_data = (w_select) ? o_mux_out : 8'bz   ;
+assign o_bus_data = (w_select) ? o_mux_out : 8'bz   ;
 
 endmodule
