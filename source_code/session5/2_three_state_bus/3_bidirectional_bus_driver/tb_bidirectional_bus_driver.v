@@ -15,7 +15,7 @@ bidirectional_bus_driver uut (
     .i_data_to_bus      (i_data_to_bus      ),
     .i_send             (i_send             ),
     .i_rcv              (i_rcv              ),
-    .io_bus_data        (o_bus_data         ),
+    .io_bus_data        (io_bus_data         ),
     .o_data_from_bus    (o_data_from_bus    )
 );
     
