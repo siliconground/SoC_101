@@ -1,39 +1,40 @@
 `timescale 1ns / 1ps
 
 module register (
+	// port list
 	rst_n, 
 	clk, 
-	in1, // 1-bit input 
-	in2, // 4-bit input
-	out1, // 1-bit input
-	out2 // 4-bit output
-); // port list
+	i_in1, // 1-bit input 
+	i_in2, // 4-bit input
+	o_out1, // 1-bit input
+	o_out2 // 4-bit output
+); 
 
 // port declaration and IO direction
-input wire rst_n;
-input wire clk;
-input wire in1;
-input wire [3:0] in2; // 4bit input
-output reg out1;
-output reg [3:0] out2; // 4bit output
+input rst_n;
+input clk;
+input i_in1;
+input [3:0] i_in2; // 4bit input
+output o_out1;
+output [3:0] o_out2; // 4bit output
 
 
 // behavioral modeling: 1-bit register
-// reg out1;
+reg o_out1;
 always @(posedge clk or negedge rst_n) 
 begin
-	if ( ~rst_n ) out1 <= 1'b0; // active low | rst enable
-	else out1 <= in1;
+	if ( ~rst_n ) o_out1 <= 1'b0; // active low | rst enable
+	else o_out1 <= i_in1;
 end
 
 
 
 // behavioral meodeling: 4-bit register
-//reg [3:0] out2;
+reg [3:0] o_out2;
 always @(posedge clk, negedge rst_n) 
 begin
-	if ( rst_n == 0 ) out2 <= 4'b0;
-	else out2 <= in2;
+	if ( rst_n == 0 ) o_out2 <= 4'b0;
+	else o_out2 <= i_in2;
 end
 	
 endmodule

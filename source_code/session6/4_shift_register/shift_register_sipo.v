@@ -3,17 +3,24 @@
 module shift_register_sipo #(
     parameter WIDTH = 8
 )(
-    input clk,
-    input reset,
-    input serial_in,
-    output reg [7:0] parallel_out
+    // port list
+    clk             ,
+    rst_n           ,
+    i_serial_in     ,
+    o_parallel_out
 );
+// port declaration
+input clk;
+input rst_n;
+input i_serial_in;
+output [7:0] o_parallel_out;
 
-always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        parallel_out <= 8'b0;
+reg [7:0] o_parallel_out;
+always @(posedge clk or negedge rst_n) begin
+    if (~rst_n) begin
+        o_parallel_out <= 8'b0;
     end else begin
-        parallel_out <= {parallel_out[6:0], serial_in}; // 왼쪽으로 한 비트씩 시프트하고 가장 오른쪽에 입력 삽입
+        o_parallel_out <= {o_parallel_out[6:0], i_serial_in}; // 왼쪽으로 한 비트씩 시프트하고 가장 오른쪽에 입력 삽입
     end
 end
 

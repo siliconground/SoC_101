@@ -1,34 +1,38 @@
 `timescale 1ns / 1ps
-//tb_3state_ex0.v
+
 module tb_data_bus_driver();
-    reg [7:0] data_A;      // 테스트용 회로 블록 A 데이터 입력
-    reg [7:0] data_B;      // 테스트용 회로 블록 B 데이터 입력
-    reg en_A;              // 테스트용 회로 블록 A 활성화 신호
-    reg en_B;              // 테스트용 회로 블록 B 활성화 신호
 
-    wire [7:0] bus_data;   // 공통 데이터 버스 출력
+// stimulus signal
+reg [7:0]   i_data_a            ;      
+reg [7:0]   i_data_b            ;      
+reg         i_en_a              ;              
+reg         i_en_b              ;              
+// monitor signal
+wire [7:0] o_bus_data           ;   
 
-    // DUT(Design Under Test) 인스턴스 생성
-    data_bus_driver uut (
-        .data_A(data_A),
-        .data_B(data_B),
-        .en_A(en_A),
-        .en_B(en_B),
-        .bus_data(bus_data)
-    );
+// DUT instantiation 
+data_bus_driver uut (
+    .i_data_a   (i_data_a   )   ,
+    .i_data_b   (i_data_b   )   ,
+    .i_en_a     (i_en_a     )   ,
+    .i_en_b     (i_en_b     )   ,
+    .o_bus_data (o_bus_data )
+);
 
-    // stimulus(자극)
-    initial begin
-        $monitor("Time=%0t | en_A=%b, data_A=%b | en_B=%b, data_B=%b | bus_data=%b", 
-                 $time, en_A, data_A, en_B, data_B, bus_data);
-        // 초기값 설정
-        data_A <= 8'haa; data_B <= 8'hcc;
-        en_A <= 0; en_B <= 0; #10; // 둘 다 비활성화 -> bus_data는 고임피던스 상태
-        en_A <= 1; en_B <= 0; #10; // A 활성화 -> bus_data는 data_A 출력
-        en_A <= 0; en_B <= 1; #10; // B 활성화 -> bus_data는 data_B 출력
-        en_A <= 1; en_B <= 1; #10; // 둘 다 활성화 -> 충돌 상황 (테스트에서 확인)
-        en_A <= 0; en_B <= 0; #10; // 둘 다 비활성화 -> bus_data는 고임피던스 상태
+// Test Scenario 
+initial begin
+    // system task for monitoring
+    $monitor("Time=%0t | en_A=%b, data_A=%b | en_B=%b, data_B=%b | bus_data=%b", 
+             $time, i_en_a, i_data_a, i_en_b, i_data_b, o_bus_data);
+    // init
+    i_data_a <= 8'haa; i_data_b <= 8'hcc;
+    // apply stimulus
+    i_en_a <= 0; i_en_b <= 0; #10;  
+    i_en_a <= 1; i_en_b <= 0; #10; 
+    i_en_a <= 0; i_en_b <= 1; #10; 
+    i_en_a <= 1; i_en_b <= 1; #10; 
+    i_en_a <= 0; i_en_b <= 0; #10; 
 
-        $finish;
-    end
+    $finish;
+end
 endmodule

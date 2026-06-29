@@ -2,36 +2,42 @@
 module fdivider #(
     parameter DIVISOR = 10
 )(
-    input wire clk_in,
-    input wire reset,
-    output reg clk_out
+    // port list
+    clk_in      ,
+    rst_n       ,
+    o_clk_out
 );
+input   clk_in                      ;
+input   rst_n                       ;
+output  o_clk_out                   ;
 
-    localparam WIDTH = $clog2(DIVISOR); // calc the minimum number of bits required to represent a given number
+localparam WIDTH = $clog2(DIVISOR)  ; // calc the minimum number of bits required to represent a given number
 										// e.g) To represent 9 values, we nned
 										// at least 4bits since 2^4 = 16 >= 9,
 										// so clog2(9) = 4
-    reg [WIDTH-1:0] count;
+// internal register
+reg [WIDTH-1:0] r_count             ;
 
-    always @(posedge clk_in or posedge reset) begin
-        if (reset) begin
-            count <= 0;
-            clk_out <= 1'b0;
+reg o_clk_out                           ;
+always @(posedge clk_in or negedge rst_n) begin
+    if (~rst_n) begin
+        r_count     <= 0                ;
+        o_clk_out   <= 1'b0             ;
+    end else begin
+        if (r_count == DIVISOR - 1) begin
+            r_count <= 0                ;
         end else begin
-            if (count == DIVISOR - 1) begin
-                count <= 0;
-            end else begin
-                count <= count + 1'b1;
-            end
+            r_count <= r_count + 1'b1   ;
+        end
             
-            // DIVISOR의 절반에 도달할 때마다 출력 토글
-            if (count == (DIVISOR / 2) - 1) begin
-                clk_out <= 1'b1;
-            end else if (count == DIVISOR - 1) begin
-                clk_out <= 1'b0;
-            end
+         // toggle divided clock when r_count comes to the half
+        if (r_count == (DIVISOR / 2) - 1) begin
+            o_clk_out <= 1'b1           ;
+        end else if (r_count == DIVISOR - 1) begin
+            o_clk_out <= 1'b0           ;
         end
     end
+end
 
 endmodule
 

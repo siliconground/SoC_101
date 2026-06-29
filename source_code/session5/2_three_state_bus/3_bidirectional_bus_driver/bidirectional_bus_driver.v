@@ -1,23 +1,31 @@
 `timescale 1ns / 1ps
 //3state_ex2.v
 module bidirectional_bus_driver (
-    input [7:0] data_to_bus,     // 회로 블록에서 버스로 보낼 데이터
-    input send,                  // 데이터 전송 활성화 신호
-    input rcv,                   // 데이터 수신 활성화 신호
-    inout [7:0] bus_data,        // 양방향 데이터 버스
-    output reg [7:0] data_from_bus // 버스에서 읽어온 데이터
+    // port list
+    i_data_to_bus       ,
+    i_send              ,
+    i_rcv               ,
+    io_bus_data         ,
+    o_data_from_bus
 );
+// port declaration
+input   [7:0]   i_data_to_bus       ;     
+input           i_send              ;                  
+input           i_rcv               ;                   
+inout   [7:0]   io_bus_data         ;        
+output  [7:0]   o_data_from_bus     ; 
 
-    // 3상태 버퍼 구현: send 신호가 활성화되면 data_to_bus를 bus_data로 전달
-    assign bus_data = (send) ? data_to_bus : 8'bz;
+// modeling : 3-state buffer
+ assign io_bus_data = (i_send) ? i_data_to_bus : 8'bz   ;
 
-    // 데이터 수신 로직: rcv 신호가 활성화되면 bus_data를 data_from_bus로 읽어옴
-    always @(*) begin
-        if (rcv) begin
-            data_from_bus = bus_data;
-        end else begin
-            data_from_bus = 8'b0; // 기본값 설정
-        end
+// modeling : data receive logic
+reg     [7:0]   o_data_from_bus                         ;
+always @(*) begin
+    if (i_rcv) begin
+        o_data_from_bus = io_bus_data                   ;
+    end else begin
+        o_data_from_bus = 8'b0                          ; // default
     end
+end
 
 endmodule

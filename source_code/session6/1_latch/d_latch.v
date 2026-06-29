@@ -2,18 +2,18 @@
 
 module d_latch (
     // port list
-    clk,
-    d, 
-    q
+    clk         ,
+    i_d         , 
+    o_q
 );
 
-input clk;
-input d;
-output q;
+input   clk         ;
+input   i_d         ;
+output  o_q         ;
 
-reg q;
+reg     o_q         ;
 always @(*) begin
-    if( clk ) q <= d;
+    if( clk ) o_q <= i_d;
 end
     
 endmodule
